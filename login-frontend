@@ -72,7 +72,7 @@
             display: block;
             cursor: pointer;
             font-size: 24px;
-            color: rgb(1, 1, 1);
+            color: white;
         }
         @media (max-width: 768px) {
             aside {
@@ -96,7 +96,7 @@
             <nav>
                 <ul class="flex space-x-6">
                     <li><a href="chart.html" class="hover:text-blue-400 transition">Chart</a></li>
-                    <li><a href="#" class="hover:text-blue-400 transition" id="transactions-link">Transactions History</a></li>
+                    <li><a href="transaction.html" class="hover:text-blue-400 transition">Transactions</a></li>
                 </ul>
             </nav>
         </div>
@@ -191,37 +191,41 @@
             </section>
         </section>
         
-        <!-- Transactions Section -->
-        <section id="transactions" class="tab-content">
-            <h3 class="text-xl font-bold mb-4">Recent Transactions</h3>
-            <div class="card rounded-xl p-4 border border-gray-800 overflow-hidden">
-                <table class="min-w-full divide-y divide-gray-800">
-                    <thead>
-                        <tr>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Value</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
-                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
-                        </tr>
-                    </thead>
-                    <tbody id="transactions-list" class="divide-y divide-gray-800"></tbody>
-                </table>
-            </div>
-            <div class="text-center mt-4">
-                <button id="back-to-dashboard" class="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg font-medium transition">Back to Dashboard</button>
-            </div>
-        </section>
-        
         <!-- Sidebar Sections -->
         <section id="profile" class="tab-content">
-            <h2>Profile</h2>
-            <p id="profile-info">Loading profile...</p>
-            <form id="profile-form">
-                <label>Name: <input type="text" id="name" required></label><br>
-                <label>Email: <input type="email" id="email" required></label><br>
-                <button type="submit">Update Profile</button>
+    <h2>Profile</h2>
+    <p id="profile-info">Loading profile...</p>
+    <form id="profile-form">
+        <div class="mb-4">
+            <label for="name">Name:</label>
+            <input type="text" id="name" class="profile-input" required>
+        </div>
+        <div class="mb-4">
+            <label for="email">Email:</label>
+            <input type="email" id="email" class="profile-input" required>
+        </div>
+        <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white">Update Profile</button>
+    </form>
+</section>
+
+                <style>
+                    .profile-input {
+    border-radius: 6px; 
+    background-color: #eceff4; 
+    border: 1px solid #4b5563;
+    padding: 8px 8px; 
+    color: #0b0101;
+    width: 18%;
+    margin-bottom: 10px;
+    font-size: 16px; 
+}
+
+.profile-input:focus {
+    outline: none;
+    border-color: #3b82f6; /* Blue border on focus */
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5); /* Glow effect */
+}
+                </style>
             </form>
         </section>
         
@@ -230,6 +234,20 @@
             <p>Fund Wallet.</p>
             <form id="fund-form">
                 <label>Amount (USD): <input type="number" id="fund-amount" required></label><br>
+                <style>
+                    #fund-amount {
+                        padding: 8px;
+                        border-radius: 6px;
+                        border: 1px solid #444;
+                        background-color: #f1f9f9;
+                        color: #080000;
+                    }
+                    #fund-amount:focus {
+                        outline: none;
+                        border-color: #2563eb;
+                        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+                    }
+                </style>
                 <button type="submit">Add Funds</button>
             </form>
             <h2>Select payment option</h2>
@@ -261,6 +279,15 @@
                     <option value="en">English</option>
                     <option value="es">Spanish</option>
                     <option value="fr">French</option>
+                    <style>
+                        #language {
+                            padding: 8px;
+                            border-radius: 6px;
+                            border: 1px solid #444;
+                            background-color: #f1f9f9;
+                            color: #080000;
+                        }
+                    </style>
                 </select>
             </label><br><br>
             <button id="save-settings">Save Settings</button>
@@ -274,6 +301,21 @@
                 <label>Upload ID (e.g., Passport/Driver's License): <input type="file" id="id-upload" required></label><br>
                 <label>Selfie with ID: <input type="file" id="selfie-upload" required></label><br>
                 <button type="submit">Submit for Verification</button>
+                <style>
+                    #id-upload, #selfie-upload {
+                        padding: 8px;
+                        border-radius: 6px;
+                        border: 1px solid #444;
+                        background-color: #f1f9f9;
+                        color: #080000;
+                        margin-bottom: 10px;
+                    }
+                    #id-upload:focus, #selfie-upload:focus {
+                        outline: none;
+                        border-color: #edf0f7;
+                        box-shadow: 0 0 0 2px rgba(235, 237, 239, 0.5);
+                    }
+                </style>
             </form>
         </section>
         
@@ -316,11 +358,15 @@
     
     <script>
         // Hamburger toggle
+        const hamburger = document.getElementById('hamburger');
+        const sidebar = document.getElementById('sidebar');
+        const main = document.getElementById('main');
+        
         hamburger.addEventListener('click', () => {
-    console.log('Hamburger clicked');
-    sidebar.classList.toggle('open');
-    main.classList.toggle('sidebar-open');
-});
+            console.log('Hamburger clicked'); // Debug: Check console on click
+            sidebar.classList.toggle('open');
+            main.classList.toggle('sidebar-open');
+        });
         
         // Sidebar navigation
         const navButtons = document.querySelectorAll('.nav-button');
@@ -333,18 +379,13 @@
             });
         });
         
-        // Transactions link
-        document.getElementById('transactions-link').addEventListener('click', (e) => {
-            e.preventDefault();
-            tabContents.forEach(content => content.classList.remove('active'));
-            document.getElementById('transactions').classList.add('active');
-        });
-        
-        // Back to dashboard
-        document.getElementById('back-to-dashboard').addEventListener('click', () => {
-            tabContents.forEach(content => content.classList.remove('active'));
-            document.getElementById('dashboard').classList.add('active');
-        });
-        
-        // Load data on page load
-        window.addEvent
+        // Load mock data
+        document.getElementById('btc-balance-display').textContent = '1.2345 BTC';
+        document.getElementById('btc-balance').textContent = '1.2345 BTC';
+        document.getElementById('portfolio-value').textContent = '$74,070';
+        document.getElementById('portfolio-change').textContent = '+2.5%';
+        document.getElementById('btc-allocation').textContent = '100% Bitcoin';
+        document.getElementById('allocation-bar').style.width = '100%';
+    </script>
+</body>
+</html>
