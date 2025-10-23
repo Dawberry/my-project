@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .price-up { color: #10b981; }
+        .price-down { color: #ef4444; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+        }
+        .card {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        /* Sidebar styles */
+        aside {
+            width: 200px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 80px;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        aside.open {
+            transform: translateX(0);
+        }
+        aside h3 {
+            margin-top: 0;
+        }
+        aside button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: none;
+            border: none;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+        }
+        aside button:hover {
+            background-color: #495057;
+        }
+        main {
+            margin-left: 0;
+            margin-top: 80px;
+            padding: 20px;
+            width: 100%;
+            transition: margin-left 0.3s ease;
+        }
+        main.sidebar-open {
+            margin-left: 220px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Hamburger icon */
+        .hamburger {
+            display: block;
+            cursor: pointer;
+            font-size: 24px;
+            color: rgb(1, 1, 1);
+        }
+        @media (max-width: 768px) {
+            aside {
+                width: 200px;
+            }
+            main.sidebar-open {
+                margin-left: 200px;
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg text-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="py-6 px-4 md:px-8 border-b border-gray-800 fixed top-0 w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-bars hamburger" id="hamburger"></i>
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/aacc5ac0-4771-4860-9ed9-77b9d81c4dd8.png" alt="Bitcoin logo" class="w-10 h-10" />
+                <h1 class="text-2xl font-bold">BitInvest</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="chart.html" class="hover:text-blue-400 transition">Chart</a></li>
+                    <li><a href="#" class="hover:text-blue-400 transition" id="transactions-link">Transactions History</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <h3>Navigation</h3>
+        <button class="nav-button" data-section="profile">Profile</button>
+        <button class="nav-button" data-section="bank">Deposit</button>
+        <button class="nav-button" data-section="notification">Notification</button>
+        <button class="nav-button" data-section="settings">Settings</button>
+        <button class="nav-button" data-section="verification">Identification Verification</button>
+        <button class="nav-button" data-section="support">Customer Service</button>
+        <button class="nav-button" data-section="about">About Us</button>
+    </aside>
+    
+    <main class="container mx-auto py-8 px-4 md:px-8" id="main">
+        <!-- Dashboard Content (Default Active) -->
+        <section id="dashboard" class="tab-content active">
+            <!-- User Balance -->
+            <section class="mb-12">
+                <div class="card rounded-xl p-6 shadow-lg border border-gray-800 text-center">
+                    <h2 class="text-3xl font-bold mb-4">Wallet Balance</h2>
+                    <p class="text-4xl font-bold" id="btc-balance-display">0.00000000 BTC</p>
+                    <p class="text-gray-400">Current Value: <span id="balance-value">$0.00</span></p>
+                </div>
+            </section>
+            <!-- Investment Actions and Portfolio -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                <!-- Buy BTC Card -->
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Buy Bitcoin</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Amount (USD)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">$</span>
+                                <input type="number" id="buy-amount" class="w-full bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg py-2 pl-8 pr-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between text-sm text-gray-400">
+                            <span>You'll get ≈ <span id="buy-receive" class="text-white">0.00000000 BTC</span></span>
+                        </div>
+                        <button id="buy-btn" class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-medium transition">Buy Bitcoin</button>
+                    </div>
+                </div>
+                <!-- Sell BTC Card -->
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Sell Bitcoin</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Amount (BTC)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fab fa-btc text-yellow-500"></i></span>
+                                <input type="number" id="sell-amount" class="w-full bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg py-2 pl-8 pr-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00000000">
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between text-sm text-gray-400">
+                            <span>You'll get ≈ <span id="sell-receive" class="text-white">$0.00</span></span>
+                        </div>
+                        <button id="sell-btn" class="w-full bg-red-600 hover:bg-red-700 py-3 rounded-lg font-medium transition">Sell Bitcoin</button>
+                    </div>
+                </div>
+                <!-- Portfolio Summary -->
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Your Portfolio</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400">Bitcoin Holdings</span>
+                            <span class="font-medium" id="btc-balance">0.00000000 BTC</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400">Current Value</span>
+                            <span class="font-medium" id="portfolio-value">$0.00</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400">24h Change</span>
+                            <span class="font-medium text-green-500" id="portfolio-change">+0.00%</span>
+                        </div>
+                        <div class="pt-4 border-t border-gray-800">
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-400">Allocation</span>
+                                <span id="btc-allocation">0% Bitcoin</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div id="allocation-bar" class="bg-yellow-500 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+        
+        <!-- Transactions Section -->
+        <section id="transactions" class="tab-content">
+            <h3 class="text-xl font-bold mb-4">Recent Transactions</h3>
+            <div class="card rounded-xl p-4 border border-gray-800 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-800">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Value</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-list" class="divide-y divide-gray-800"></tbody>
+                </table>
+            </div>
+            <div class="text-center mt-4">
+                <button id="back-to-dashboard" class="bg-gray-600 hover:bg-gray-700 px-6 py-3 rounded-lg font-medium transition">Back to Dashboard</button>
+            </div>
+        </section>
+        
+        <!-- Sidebar Sections -->
+        <section id="profile" class="tab-content">
+            <h2>Profile</h2>
+            <p id="profile-info">Loading profile...</p>
+            <form id="profile-form">
+                <label>Name: <input type="text" id="name" required></label><br>
+                <label>Email: <input type="email" id="email" required></label><br>
+                <button type="submit">Update Profile</button>
+            </form>
+        </section>
+        
+        <section id="bank" class="tab-content">
+            <h2>Deposit</h2>
+            <p>Fund Wallet.</p>
+            <form id="fund-form">
+                <label>Amount (USD): <input type="number" id="fund-amount" required></label><br>
+                <button type="submit">Add Funds</button>
+            </form>
+            <h2>Select payment option</h2>
+            <p>Buy with USD</p>
+            <button id="buy-with-usd" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium transition">Buy with USD</button>
+            <p>Buy with Card</p>
+            <button id="buy-with-card" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium transition">Buy with Card</button>
+            <p>Or fund your wallet directly via Bitcoin address: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</p>
+        </section>
+        
+        <section id="notification" class="tab-content">
+            <h2>Notification</h2>
+            <p>Your recent notifications:</p>
+            <ul>
+                <li>Transaction completed: Bought 0.02 BTC</li>
+                <li>Price alert: BTC reached $60,000</li>
+                <li>Security update: Password changed</li>
+            </ul>
+        </section>
+        
+        <section id="settings" class="tab-content">
+            <h2>Settings</h2>
+            <p>Account preferences.</p>
+            <label><input type="checkbox" id="dark-mode"> Enable Dark Mode</label><br>
+            <label><input type="checkbox" id="notifications"> Enable Notifications</label><br>
+            <label><input type="checkbox" id="soft-notifications"> Enable Soft Notifications</label><br>
+            <label>Language: 
+                <select id="language">
+                    <option value="en">English</option>
+                    <option value="es">Spanish</option>
+                    <option value="fr">French</option>
+                </select>
+            </label><br><br>
+            <button id="save-settings">Save Settings</button>
+            <button id="logout-settings" style="background-color: #dc3545; margin-left: 10px;">Logout</button>
+        </section>
+        
+        <section id="verification" class="tab-content">
+            <h2>Identification Verification</h2>
+            <p>Verify your identity for enhanced security and compliance.</p>
+            <form id="verification-form">
+                <label>Upload ID (e.g., Passport/Driver's License): <input type="file" id="id-upload" required></label><br>
+                <label>Selfie with ID: <input type="file" id="selfie-upload" required></label><br>
+                <button type="submit">Submit for Verification</button>
+            </form>
+        </section>
+        
+        <section id="support" class="tab-content">
+            <h2>Customer Service</h2>
+            <p>Need help? Reach out to our support team.</p>
+            <form id="support-form">
+                <label>Subject: <input type="text" id="subject" required></label><br>
+                <label>Message: <textarea id="message" required></textarea></label><br>
+                <button type="submit">Send Message</button>
+            </form>
+            <p>Or chat live: <a href="#">Start Chat</a></p>
+        </section>
+        
+        <section id="about" class="tab-content">
+            <h2>About Us</h2>
+            <p>BitInvest is a leading platform for Bitcoin investments, offering secure trading, OTC options, and real-time coin rates. Founded in 2025, we prioritize user security and compliance.</p>
+            <p>Contact: info@bitinvest.com</p>
+        </section>
+    </main>
+    
+    <footer class="py-6 px-4 md:px-8 border-t border-gray-800 mt-12">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7e704a4f-f5f0-4889-b723-dcc0a2047554.png" alt="BitInvest logo" class="w-8 h-8" />
+                    <span class="font-medium">BitInvest</span>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>© 2025 BitInvest. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Hamburger toggle
+        hamburger.addEventListener('click', () => {
+    console.log('Hamburger clicked');
+    sidebar.classList.toggle('open');
+    main.classList.toggle('sidebar-open');
+});
+        
+        // Sidebar navigation
+        const navButtons = document.querySelectorAll('.nav-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        navButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(button.dataset.section).classList.add('active');
+            });
+        });
+        
+        // Transactions link
+        document.getElementById('transactions-link').addEventListener('click', (e) => {
+            e.preventDefault();
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById('transactions').classList.add('active');
+        });
+        
+        // Back to dashboard
+        document.getElementById('back-to-dashboard').addEventListener('click', () => {
+            tabContents.forEach(content => content.classList.remove('active'));
+            document.getElementById('dashboard').classList.add('active');
+        });
+        
+        // Load data on page load
+        window.addEvent
