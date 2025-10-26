@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transactions History</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+        }
+        .card {
+            backdrop-filter: blur(16px) saturate(180%);
+            -webkit-backdrop-filter: blur(16px) saturate(180%);
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+    </style>
+</head>
+<body class="gradient-bg text-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="py-6 px-4 md:px-8 border-b border-gray-800 fixed top-0 w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/aacc5ac0-4771-4860-9ed9-77b9d81c4dd8.png" alt="Bitcoin logo" class="w-10 h-10" />
+                <h1 class="text-2xl font-bold">BitInvest</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="hamburgerIcon.html" class="hover:text-blue-400 transition">Back to Dashboard</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <main class="container mx-auto py-8 px-4 md:px-8 mt-20">
+        <!-- Transactions Section -->
+        <section>
+            <h3 class="text-xl font-bold mb-4">Recent Transactions</h3>
+            <div class="card rounded-xl p-4 border border-gray-800 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-800">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Value</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-list" class="divide-y divide-gray-800">
+                        <tr>
+                            <td class="px-4 py-3 text-sm text-gray-100">Buy</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">0.02 BTC</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">$59,000</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">$1,180</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">2025-01-01</td>
+                            <td class="px-4 py-3 text-sm text-green-500">Completed</td>
+                        </tr>
+                        <tr>
+                            <td class="px-4 py-3 text-sm text-gray-100">Sell</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">0.01 BTC</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">$60,000</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">$600</td>
+                            <td class="px-4 py-3 text-sm text-gray-100">2025-01-02</td>
+                            <td class="px-4 py-3 text-sm text-green-500">Completed</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="py-6 px-4 md:px-8 border-t border-gray-800 mt-12">
+        <div class="container mx-auto">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="flex items-center space-x-2 mb-4 md:mb-0">
+                    <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/7e704a4f-f5f0-4889-b723-dcc0a2047554.png" alt="BitInvest logo" class="w-8 h-8" />
+                    <span class="font-medium">BitInvest</span>
+                </div>
+                <div class="text-sm text-gray-400">
+                    <p>© 2025 BitInvest. All rights reserved.</p>
+                </div>
+                <div class="flex space-x-4 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-telegram"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-github"></i></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
