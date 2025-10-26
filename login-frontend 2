@@ -1,0 +1,431 @@
+<html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - BitInvest</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .price-up { color: #10b981; }
+        .price-down { color: #ef4444; }
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #0f172a 100%);
+            background-attachment: fixed; /* Fixed background */
+        }
+        .card {
+            background-color: #1f2937; 
+            border: 1px solid #374151;
+        }
+        /* Sidebar styles */
+        aside {
+            width: 200px;
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 80px;
+            overflow-y: auto;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+        }
+        aside.open {
+            transform: translateX(0);
+        }
+        aside h3 {
+            margin-top: 0;
+        }
+        aside button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            background: none;
+            border: none;
+            color: white;
+            text-align: left;
+            cursor: pointer;
+        }
+        aside button:hover {
+            background-color: #495057;
+        }
+        main {
+            margin-left: 0;
+            margin-top: 80px;
+            padding: 20px;
+            width: 100%;
+            transition: margin-left 0.3s ease;
+        }
+        main.sidebar-open {
+            margin-left: 220px;
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        /* Hamburger icon */
+        .hamburger {
+            display: block;
+            cursor: pointer;
+            font-size: 24px;
+            color: white;
+        }
+        
+        /* Profile inputs */
+        .profile-input {
+            border-radius: 6px;
+            background-color: #eceff4;
+            border: 1px solid #4b5563;
+            padding: 8px 8px;
+            color: #0b0101;
+            width: 100%;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+        .profile-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+        }
+        /* Deposit input */
+        #fund-amount {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background-color: #f1f9f9;
+            color: #080000;
+        }
+        #fund-amount:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+        }
+        /* Language select */
+        #language {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background-color: #f1f9f9;
+            color: #080000;
+        }
+        /* File inputs */
+        #id-upload, #selfie-upload {
+            padding: 8px;
+            border-radius: 6px;
+            border: 1px solid #444;
+            background-color: #f1f9f9;
+            color: #080000;
+            margin-bottom: 10px;
+        }
+        #id-upload:focus, #selfie-upload:focus {
+            outline: none;
+            border-color: #edf0f7;
+            box-shadow: 0 0 0 2px rgba(235, 237, 239, 0.5);
+        }
+        /* Gold accent for buttons */
+        .gold-btn {
+            background: linear-gradient(45deg, #f59e0b, #d97706);
+            color: black;
+            transition: all 0.3s ease;
+        }
+        .gold-btn:hover {
+            box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+        }
+        @media (max-width: 768px) {
+            aside {
+                width: 200px;
+            }
+            main.sidebar-open {
+                margin-left: 200px;
+            }
+        }
+    </style>
+</head>
+<body class="gradient-bg text-gray-100 min-h-screen">
+    <!-- Header -->
+    <header class="py-6 px-4 md:px-8 border-b border-gray-800 fixed top-0 w-full z-10">
+        <div class="container mx-auto flex justify-between items-center">
+            <div class="flex items-center space-x-2">
+                <i class="fas fa-bars hamburger" id="hamburger"></i>
+                
+                <img src="https://storage.googleapis.com/workspace-0f70711f-8b4e-4d94-86f1-2a93ccde5887/image/aacc5ac0-4771-4860-9ed9-77b9d81c4dd8.png" alt="Bitcoin logo" class="w-10 h-10" />
+                <h1 class="text-2xl font-bold">BitInvest</h1>
+            </div>
+            <nav>
+                <ul class="flex space-x-6">
+                    <li><a href="chart.html" class="hover:text-blue-400 transition">Chart</a></li>
+                    <li><a href="Transactions.html" class="hover:text-blue-400 transition">Transactions</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    
+    <!-- Sidebar -->
+    <aside id="sidebar">
+        <h3>Menu</Menu></h3>
+        <button class="nav-button" data-section="profile">Profile</button>
+        <button class="nav-button" data-section="bank">Deposit</button>
+        <button class="nav-button" data-section="notification">Notification</button>
+        <button class="nav-button" data-section="settings">Settings</button>
+        <button class="nav-button" data-section="verification">Identification Verification</button>
+        <button class="nav-button" data-section="faq">FAQ</button>
+        <button class="nav-button" data-section="support">Customer Service</button>
+        <button class="nav-button" data-section="about">About Us</button>
+    </aside>
+    
+    <main class="container mx-auto py-8 px-4 md:px-8" id="main">
+        <!-- Dashboard Content (Default Active) -->
+        <section id="dashboard" class="tab-content active">
+            <!-- User Balance -->
+            <section class="mb-12">
+                <div class="card rounded-xl p-6 shadow-lg border border-gray-800 text-center">
+                    <h2 class="text-3xl font-bold mb-4">Wallet Balance</h2>
+                    <p class="text-4xl font-bold" id="btc-balance-display">0.00000000 BTC</p>
+                    <p class="text-gray-400">Current Value: <span id="balance-value">$0.00</span></p>
+                </div>
+            </section>
+            <!-- Current Investments and Earnings -->
+            <section class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Current Investments</h3>
+                    <p class="text-gray-400">Active Plans: <span class="text-white">Bitcoin Starter (ROI: 10%)</span></p>
+                    <p class="text-gray-400">Invested: <span class="text-white">$1,000</span></p>
+                    <p class="text-gray-400">Duration: <span class="text-white">30 Days</span></p>
+                </div>
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Earnings</h3>
+                    <p class="text-gray-400">Total Earned: <span class="text-green-400">$250</span></p>
+                    <p class="text-gray-400">Pending: <span class="text-yellow-400">$50</span></p>
+                    <button id="withdraw-btn" class="gold-btn w-full py-3 rounded-lg font-medium mt-4">Withdraw Funds</button>
+                </div>
+            </section>
+            <!-- Investment Actions and Portfolio -->
+            <section class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+                <!-- Buy BTC Card -->
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Buy Bitcoin</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Amount (USD)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3">$</span>
+                                <input type="number" id="buy-amount" class="w-full bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg py-2 pl-8 pr-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00">
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between text-sm text-gray-400">
+                            <span>You'll get ≈ <span id="buy-receive" class="text-white">0.00000000 BTC</span></span>
+                        </div>
+                        <button id="buy-btn" class="w-full bg-green-600 hover:bg-green-700 py-3 rounded-lg font-medium transition">Buy Bitcoin</button>
+                    </div>
+                </div>
+                <!-- Sell BTC Card -->
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Sell Bitcoin</h3>
+                    <div class="space-y-4">
+                        <div>
+                            <label class="block text-sm text-gray-400 mb-1">Amount (BTC)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3"><i class="fab fa-btc text-yellow-500"></i></span>
+                                <input type="number" id="sell-amount" class="w-full bg-gray-900 bg-opacity-50 border border-gray-700 rounded-lg py-2 pl-8 pr-4 focus:ring-2 focus:ring-blue-500 focus:border-blue-500" placeholder="0.00000000">
+                            </div>
+                        </div>
+                        <div class="flex items-center justify-between text-sm text-gray-400">
+                            <span>You'll get ≈ <span id="sell-receive" class="text-white">$0.00</span></span>
+                        </div>
+                        <button id="sell-btn" class="w-full bg-red-600 hover:bg-red-700 py-3 rounded-lg font-medium transition">Sell Bitcoin</button>
+                    </div>
+                </div>
+                <!-- Portfolio Summary -->
+                <div class="card rounded-xl p-6 border border-gray-800">
+                    <h3 class="text-xl font-bold mb-4">Your Portfolio</h3>
+                    <div class="space-y-6">
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400">Bitcoin Holdings</span>
+                            <span class="font-medium" id="btc-balance">0.00000000 BTC</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400">Current Value</span>
+                            <span class="font-medium" id="portfolio-value">$0.00</span>
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <span class="text-gray-400">24h Change</span>
+                            <span class="font-medium text-green-500" id="portfolio-change">+0.00%</span>
+                        </div>
+                        <div class="pt-4 border-t border-gray-800">
+                            <div class="flex justify-between mb-2 text-sm">
+                                <span class="text-gray-400">Allocation</span>
+                                <span id="btc-allocation">0% Bitcoin</span>
+                            </div>
+                            <div class="w-full bg-gray-700 rounded-full h-2">
+                                <div id="allocation-bar" class="bg-yellow-500 h-2 rounded-full" style="width: 0%"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </section>
+        
+        <!-- Transactions Section -->
+        <section id="transactions" class="tab-content">
+            <h3 class="text-xl font-bold mb-4">Recent Transactions</h3>
+            <div class="card rounded-xl p-4 border border-gray-800 overflow-hidden">
+                <table class="min-w-full divide-y divide-gray-800">
+                    <thead>
+                        <tr>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Type</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Amount</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Price</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Value</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Date</th>
+                            <th class="px-4 py-3 text-left text-xs font-medium text-gray-400 uppercase tracking-wider">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactions-list" class="divide-y divide-gray-800"></tbody>
+                </table>
+            </div>
+            <div class="text-center mt-4">
+                <button onclick="goBackToDashboard()" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white font-medium transition">Back to Dashboard</button>
+            </div>
+        </section>
+        
+        <!-- Sidebar Sections -->
+        <section id="profile" class="tab-content">
+            <h2>Profile</h2>
+            <p id="profile-info">Loading profile...</p>
+            <form id="profile-form">
+                <div class="mb-4">
+                    <label for="name">Name:</label>
+                    <input type="text" id="name" class="profile-input" required>
+                </div>
+                <div class="mb-4">
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" class="profile-input" required>
+                </div>
+                <button type="submit" class="mt-4 bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white">Update Profile</button>
+            </form>
+        </section>
+        
+        <section id="bank" class="tab-content">
+            <h2>Deposit</h2>
+            <p>Fund Wallet.</p>
+            <form id="fund-form">
+                <label>Amount (USD): <input type="number" id="fund-amount" required></label><br>
+                <button type="submit">Add Funds</button>
+            </form>
+            <h2>Select payment option</h2>
+            <p>Buy with USD</p>
+            <button id="buy-with-usd" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium transition">Buy with USD</button>
+            <p>Buy with Card</p>
+            <button id="buy-with-card" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-medium transition">Buy with Card</button>
+            <p>Or fund your wallet directly via Bitcoin address: 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa</p>
+            <style>
+                #fund-amount {
+                    padding: 8px;
+                    border-radius: 6px;
+                    border: 1px solid #444;
+                    background-color: #f1f9f9;
+                    color: #080000;
+                }
+                #fund-amount:focus {
+                    outline: none;
+                    border-color: #2563eb;
+                    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.5);
+                }
+            </style>
+        </section>
+        
+        <section id="notification" class="tab-content">
+            <h2>Notification</h2>
+            <p>Your recent notifications:</p>
+            <ul>
+                <li>Transaction completed: Bought 0.02 BTC</li>
+                <li>Price alert: BTC reached $60,000</li>
+                <li>Security update: Password changed</li>
+            </ul>
+        </section>
+        
+        <section id="settings" class="tab-content">
+            <h2>Settings</h2>
+            <p>Account preferences.</p>
+            <label><input type="checkbox" id="dark-mode"> Enable Dark Mode</label><br>
+            <label><input type="checkbox" id="notifications"> Enable Notifications</label>
+        </section>
+
+        <h3 class="text-lg font-bold mt-6 mb-4">Frequently Asked Questions (FAQ)</h3>
+        <div class="card rounded-xl p-4 border border-gray-800">
+            <details class="mb-4">
+                <summary class="cursor-pointer text-white font-medium">How do I buy Bitcoin?</summary>
+                <p class="text-gray-400 mt-2">Go to the Dashboard and use the "Buy Bitcoin" card. Enter the amount in USD, and follow the payment prompts.</p>
+            </details>
+            <details class="mb-4">
+                <summary class="cursor-pointer text-white font-medium">What is the minimum investment?</summary>
+                <p class="text-gray-400 mt-2">The minimum investment is $10 USD for the Bitcoin Starter plan.</p>
+            </details>
+            <details class="mb-4">
+                <summary class="cursor-pointer text-white font-medium">How do I withdraw funds?</summary>
+                <p class="text-gray-400 mt-2">Click the "Withdraw Funds" button in the Earnings section on the Dashboard. Funds are processed within 24-48 hours.</p>
+            </details>
+            <details>
+                <summary class="cursor-pointer text-white font-medium">Is my data secure?</summary>
+                <p class="text-gray-400 mt-2">Yes, we use industry-standard encryption and 2FA to protect your information. See Privacy and Security above for more options.</p>
+            </details>
+        </div>
+    </section>
+        
+        <section id="support" class="tab-content">
+        <h2>Customer Service</h2>
+        <p>Need help? Contact our support team.</p>
+        <div class="card rounded-xl p-4 border border-gray-800 mb-4">
+            <h3 class="text-lg font-bold mb-2">Contact Us</h3>
+            <p class="text-gray-400 mb-2">Email: support@bitinvest.com</p>
+            <p class="text-gray-400 mb-2">Phone: +1 (800) 123-4567</p>
+            <p class="text-gray-400 mb-4">Live Chat: Available 24/7</p>
+            <button class="bg-green-600 hover:bg-green-700 px-4 py-2 rounded-lg text-white">Start Live Chat</button>
+        </div>
+        <div class="card rounded-xl p-4 border border-gray-800">
+            <h3 class="text-lg font-bold mb-2">Submit a Ticket</h3>
+            <form>
+                <label for="issue-type" class="block text-sm text-gray-400 mb-1">Issue Type</label>
+                <select id="issue-type" class="profile-input mb-4">
+                    <option>Technical Issue</option>
+                    <option>Account Problem</option>
+                    <option>Transaction Inquiry</option>
+                    <option>Other</option>
+                </select>
+                <label for="message" class="block text-sm text-gray-400 mb-1">Message</label>
+                <textarea id="message" class="profile-input mb-4" rows="4" placeholder="Describe your issue..."></textarea>
+                <button type="submit" class="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded-lg text-white">Submit Ticket</button>
+            </form>
+        </div>
+    </section>
+      
+    
+        <section id="about" class="tab-content">
+        <h2>About Us</h2>
+        <p>Welcome to BitInvest, your trusted platform for Bitcoin investments.</p>
+        <div class="card rounded-xl p-4 border border-gray-800 mb-4">
+            <h3 class="text-lg font-bold mb-2">Our Mission</h3>
+            <p class="text-gray-400">At BitInvest, we empower users to invest in Bitcoin securely and easily. Our platform offers competitive ROI plans, real-time trading, and top-notch security.</p>
+        </div>
+        <div class="card rounded-xl p-4 border border-gray-800 mb-4">
+            <h3 class="text-lg font-bold mb-2">Why Choose Us?</h3>
+            <ul class="text-gray-400 list-disc list-inside">
+                <li>Low fees and high returns</li>
+                <li>24/7 customer support</li>
+                <li>Advanced security features</li>
+                <li>User-friendly interface</li>
+            </ul>
+        </div>
+        <div class="card rounded-xl p-4 border border-gray-800">
+            <h3 class="text-lg font-bold mb-2">Team</h3>
+            <p>Our team consists of experienced professionals in finance, technology, and customer service, dedicated to providing the best investment experience.</p>
+    </main>
+    
+    <!-- Link to external JavaScript file for hamburger and navigation -->
+    <script src="hamburger.js"></script>
+</body>
+</html>
